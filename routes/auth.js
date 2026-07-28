@@ -101,6 +101,10 @@ router.post('/login', loginLimiter, async (req, res) => {
       maxAge: EVASTE_MAX_AGE
     });
 
+    // Päivitetään viimeisin kirjautumisaika käyttämättömien tilien seurantaa varten
+    user.lastLogin = new Date();
+    await user.save();
+
     // Kirjataan kirjautuminen lokiin
     await kirjaaLoki('login', user.username);
 

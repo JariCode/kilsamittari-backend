@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  // Viimeisin kirjautumisaika, päivittyy jokaisella kirjautumisella
+  // Käytetään käyttämättömien tilien tunnistamiseen ylläpidossa
+  lastLogin: {
+    type: Date,
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now

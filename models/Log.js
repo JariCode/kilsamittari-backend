@@ -32,4 +32,8 @@ const logSchema = new mongoose.Schema({
 // Haut nopeutuvat aikajärjestyksessä
 logSchema.index({ createdAt: -1 });
 
+// Lokimerkinnät poistuvat automaattisesti 12 kuukauden kuluttua
+// 31536000 sekuntia on 365 päivää
+logSchema.index({ createdAt: 1 }, { expireAfterSeconds: 31536000 });
+
 module.exports = mongoose.model('Log', logSchema);

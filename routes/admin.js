@@ -28,7 +28,7 @@ router.get('/users', async (req, res) => {
   try {
     const users = await User
       .find()
-      .select('username role createdAt')
+      .select('username role createdAt lastLogin')
       .sort({ createdAt: -1 })
       .lean();
 
