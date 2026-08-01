@@ -6,7 +6,7 @@ const logSchema = new mongoose.Schema({
   action: {
     type: String,
     required: true,
-    enum: ['register', 'login', 'logout', 'role_change', 'delete_user']
+    enum: ['register', 'login', 'logout', 'role_change', 'delete_user', 'delete_self']
   },
   // Kuka teki toiminnon, tallennetaan nimi tekstinä
   actorUsername: {

@@ -6,6 +6,7 @@ const User = require('../models/User');
 const WalkEntry = require('../models/WalkEntry');
 const { vaadiKirjautuminen } = require('../middleware/auth');
 const { isValidUsername, isValidPassword } = require('../utils/validators');
+const { kirjaaLoki } = require('../utils/logger');
 
 const router = express.Router();
 
@@ -170,6 +171,9 @@ router.delete('/', async (req, res) => {
     if (!salasanaTasmaa) {
       return res.status(401).json({ error: 'Väärä salasana' });
     }
+
+    // Kirjataan tilin poisto lokiin ennen poistoa, jotta käyttäjänimi on vielä saatavilla
+    await kirjaaLoki('delete_self', user.username, user.username);
 
     // Poistetaan ensin kaikki käyttäjän merkinnät
     await WalkEntry.deleteMany({ userId: user._id });

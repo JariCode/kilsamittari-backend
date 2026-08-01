@@ -61,6 +61,13 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Virheellinen päivämäärä' });
     }
 
+    // Tulevaisuuden päivämäärää ei sallita, koska kävelyä ei voi kirjata etukäteen
+    const tanaan = new Date();
+    tanaan.setHours(23, 59, 59, 999);
+    if (new Date(date) > tanaan) {
+      return res.status(400).json({ error: 'Päivämäärä ei voi olla tulevaisuudessa' });
+    }
+
     const kilometrit = Number(km);
 
     if (Number.isNaN(kilometrit) || kilometrit <= 0 || kilometrit > 500) {
