@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
     const kilometrit = Number(km);
 
     if (Number.isNaN(kilometrit) || kilometrit <= 0 || kilometrit > 500) {
-      return res.status(400).json({ error: 'Kilometrit tulee olla välillä 0 ja 500' });
+      return res.status(400).json({ error: 'Kilometrit tulee olla suurempi kuin 0 ja enintään 500' });
     }
 
     // Pyöristetään kahteen desimaaliin
