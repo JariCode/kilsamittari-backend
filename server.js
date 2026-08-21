@@ -30,6 +30,15 @@ app.use(helmet({
   referrerPolicy: { policy: 'no-referrer' }
 }));
 
+// Rajataan selaimen ominaisuuksia joita api ei tarvitse
+app.use((req, res, next) => {
+  res.setHeader(
+    'Permissions-Policy',
+    'geolocation=(), microphone=(), camera=(), payment=()'
+  );
+  next();
+});
+
 // Piilotetaan express-tunniste kokonaan
 app.disable('x-powered-by');
 
