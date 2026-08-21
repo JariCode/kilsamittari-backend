@@ -42,10 +42,23 @@ app.use((req, res, next) => {
 // Piilotetaan express-tunniste kokonaan
 app.disable('x-powered-by');
 
-// Cors vain sallitulle originille, osoite haetaan envistä
+// Haetaan osoitteet envistä ja pilkotaan taulukoksi
+const allowedOrigins = process.env.ALLOWED_ORIGIN
+  ? process.env.ALLOWED_ORIGIN.split(',').map(origin => origin.trim())
+  : [];
+
+// Sallitaan frontendin kutsut ja evästeiden lähetys
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN,
-  credentials: true
+  origin: (origin, callback) => {
+    // Sallitaan myös pyynnöt ilman originia (esim. Postman tai mobiilisovellukset)
+    // sekä tarkistetaan löytyykö origin listalta
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS: origin ei ole sallittu'));
+    }
+  },
+  credentials: true, // sallii evästeet (JWT-token)
 }));
 
 // Pieni oletusraja kaikille reiteille paitsi health-tuonnille
