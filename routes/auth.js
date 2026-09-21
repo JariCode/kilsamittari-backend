@@ -17,7 +17,7 @@ const EVASTE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 // Bruteforce-suojaus kirjautumiselle
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: 500,
   message: { error: 'Liian monta yritystä. Yritä myöhemmin uudelleen.' },
   standardHeaders: true,
   legacyHeaders: false
@@ -98,6 +98,7 @@ router.post('/login', loginLimiter, async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      partitioned: process.env.NODE_ENV === 'production',
       maxAge: EVASTE_MAX_AGE
     });
 
