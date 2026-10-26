@@ -1,4 +1,4 @@
-// P oistaa objekteista avaimet jotka alkavat $-merkillä tai sisältävät pisteen
+// Poistaa objekteista avaimet jotka alkavat $-merkillä tai sisältävät pisteen
 // nämä ovat MongoDB-operaattoreita, joilla voi yrittää NoSQL-injektiota
 function puhdistaObjekti(kohde) {
   if (kohde === null || typeof kohde !== 'object') {
