@@ -80,7 +80,13 @@ app.use(sanitize);
 
 // CSRF-token voidaan hakea ennen kirjautumista, mutta tilaa muuttavat pyynnöt suojataan.
 app.get('/api/csrf-token', csrfTokenEndpoint);
-app.use(tarkistaCsrfToken);
+app.use((req, res, next) => {
+  if (req.path === '/api/health') {
+    return next();
+  }
+
+  return tarkistaCsrfToken(req, res, next);
+});
 
 // Reitit
 app.use('/api/auth', authRoutes);
