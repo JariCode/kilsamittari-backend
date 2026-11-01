@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const sanitize = require('./middleware/sanitize');
+const { csrfTokenEndpoint, tarkistaCsrfToken } = require('./middleware/csrf');
 const authRoutes = require('./routes/auth');
 const walkRoutes = require('./routes/walks');
 const healthRoutes = require('./routes/healthRoutes');
@@ -59,6 +60,7 @@ app.use(cors({
     }
   },
   credentials: true, // sallii evästeet (JWT-token)
+  allowedHeaders: ['Content-Type', 'X-CSRF-Token']
 }));
 
 // Pieni oletusraja kaikille reiteille paitsi health-tuonnille
@@ -75,6 +77,10 @@ app.use(cookieParser());
 
 // Nosql-injektiosuojaus
 app.use(sanitize);
+
+// CSRF-token voidaan hakea ennen kirjautumista, mutta tilaa muuttavat pyynnöt suojataan.
+app.get('/api/csrf-token', csrfTokenEndpoint);
+app.use(tarkistaCsrfToken);
 
 // Reitit
 app.use('/api/auth', authRoutes);
